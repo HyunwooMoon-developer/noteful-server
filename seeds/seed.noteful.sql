@@ -1,10 +1,10 @@
-insert into folders (name)
+insert into folders (folder_name)
 values
 ('A'),
 ('B'),
 ('C');
 
-insert into notes (name, content, folder_id)
+insert into notes (note_name, content, folder_id)
 values
 ('apple' , 'apple', 1 ),
 ('banana', 'banana' , 2),

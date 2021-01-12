@@ -7,8 +7,9 @@ const cors = require('cors')
 const helmet = require('helmet')
 const {NODE_ENV} = require('./config');
 const errorHandler = require('./errorHandler')
-const validateBearerToken = require('./validateBearerToken')
+//const validateBearerToken = require('./validateBearerToken')
 const logger = require('./logger');
+const folderRouter = require('./folders/folder-route')
 
 const app = express()
 //pipeline begins
@@ -25,7 +26,9 @@ app.use(cors())
 app.get('/', (req, res) => {
     res.send('Hello, boilerplate!');
 })
-app.use(validateBearerToken);
+
+app.use('/api/folders' , folderRouter);
+//app.use(validateBearerToken);
 
 //error handler
 app.use(errorHandler);
