@@ -44,6 +44,13 @@ describe('Folders Endpoints', ()=> {
             .get('/api/folders')
             .expect(200, testFolder)
         });
+        it('GET /api/folders/folder_id responds with 200 and the specified folder' , ()=> {
+            const folderId = 2;
+            const expectedFolder= testFolder[folderId -1]
+            return supertest(app)
+                .get(`/api/folders/${folderId}`)
+                .expect(200, expectedFolder)
+        })
 
       });
     });
