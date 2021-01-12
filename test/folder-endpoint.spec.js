@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable no-undef */
 const { expect } = require('chai');
 const knex = require('knex');
@@ -99,15 +100,86 @@ describe('Folders Endpoints', ()=> {
             });
         it(`Responds with 204 and removes the folder` , ()=>{
             const idToRemove = 2;
-            const expectedFolder = testFolder.filter(folder => folder.id !==idToRemove)
+            const expectedFolder = testFolder.filter(folder => folder.folder_id !==idToRemove)
             return supertest(app)
                     .delete(`/api/folders/${idToRemove}`)
                     .expect(204)
-                    .then(() => supertest(app)
-                                .get('/folders')
+                    .then(res => supertest(app)
+                                .get('/api/folders')
                                 .expect(expectedFolder)
                                 )
         })    
+        })
+    })
+    describe(`PATCH /api/folders/:folder_id` , () => {
+        context(`Given no folder` , () => {
+            it(`responds with 404` , () => {
+                const folderId = 123456;
+                return supertest(app)
+                        .patch(`/api/folders/${folderId}`)
+                        .expect(404, {
+                            error: {message : `Folder doesn't exist`}
+                        })
+            })
+        })
+        context(`Given there are folders in the database` , ()=> {
+            const testFolder = makeFolderArray();
+            beforeEach('insert folders', ()=>{
+                return db
+                    .into('folders')
+                    .insert(testFolder)
+            });
+        it(`Responds with 204 and update the folder` , () => {
+            const idToUpdate = 1;
+            const updateFolder = {
+                folder_name : 'a'
+            }
+            const expectedFolder = {
+                ...testFolder[idToUpdate -1],
+                ...updateFolder
+            }
+            return supertest(app)
+                .patch(`/api/folders/${idToUpdate}`)
+                .send(updateFolder)
+                .expect(204)
+                .then(res => 
+                    supertest(app)
+                    .get(`/api/folders/${idToUpdate}`)
+                    .expect(expectedFolder)
+                    )
+            })
+        it(`Responds with 400 when no required fields supplied` , () => {
+            const idToUpdate = 1;
+            return supertest(app)  
+                    .patch(`/api/folders/${idToUpdate}`)
+                    .send({irrelevantField : 'foo'})
+                    .expect(400, {
+                        error : {message: `Request body must contain folder_name`}
+                    })
+            })
+        it(`Responds with 204 when updating only a subset of fields` , ()=>{
+            const idToUpdate = 1;
+            const updateFolder ={
+                folder_name : 'Z'
+            }
+            const expectedFolder = {
+                ...testFolder[idToUpdate -1]
+                , ...updateFolder
+            }
+
+            return supertest(app)  
+                .patch(`/api/folders/${idToUpdate}`)
+                .send({
+                    ...updateFolder,
+                    fieldToIgnore : `Should not be in GET response`
+                })
+                .expect(204)
+                .then(res => 
+                    supertest(app)
+                    .get(`/api/folders/${idToUpdate}`)
+                    .expect(expectedFolder)
+                    )
+        })
         })
     })
 })
