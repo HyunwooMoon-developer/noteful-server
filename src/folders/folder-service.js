@@ -22,12 +22,12 @@ const foldersService = {
     },
     deleteFolder(knex, id){
         return knex('folders')
-            .where({id})
+            .where('folder_id', id)
             .delete()
     },
     updateFolder(knex, id, updateFolder){
         return knex('folders')
-            .where({id})
+            .where('folder_id' , id)
             .update(updateFolder)
     }
 }

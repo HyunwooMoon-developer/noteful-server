@@ -22,12 +22,12 @@ const notesService = {
     },
     deleteNote(knex, id){
         return knex('notes')
-            .where({id})
+            .where('note_id', id)
             .delete()
     },
     updateNote(knex, id, updateNote){
         return knex('notes')
-            .where({id})
+            .where('note_id', id)
             .update(updateNote)
     }
 }

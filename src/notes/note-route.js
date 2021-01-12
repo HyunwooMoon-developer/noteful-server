@@ -74,7 +74,7 @@ NoteRoute
         req.app.get('db'),
         req.params.note_id
     )
-    .then(numRowsAffected => {
+    .then(() => {
         res.status(204).end()
     })
     .catch(next)
@@ -91,9 +91,10 @@ NoteRoute
     })
     notesService.updateNote(
         req.app.get('db'),
-        req.params.note_id
+        req.params.note_id,
+        noteToUpdate
     )
-    .then(numRowsAffected => {
+    .then(() => {
         res.status(204).end()
     })
     .catch(next)

@@ -72,7 +72,7 @@ folderRouter
         req.app.get('db'),
         req.params.folder_id
     )
-    .then(numRowsAffected => {
+    .then(() => {
         res.status(204).end()
     })
     .catch(next)
@@ -88,9 +88,10 @@ const numberOfValues = Object.values(folderToUpdate).filter(Boolean).length;
     })
     foldersService.updateFolder(
         req.app.get('db'),
-        req.params.folder_id
+        req.params.folder_id,
+        folderToUpdate
     )
-    .then(numRowsAffected => {
+    .then(() => {
         res.status(204).end()
     })
     .catch(next)
