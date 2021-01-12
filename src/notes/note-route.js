@@ -34,7 +34,7 @@ NoteRoute
     return res.status(400).json({
         error : {message : `Missing '${key}' in requset body`}
     })
-    newNote.modified  = modified;
+    //newNote.modified  = modified;
 
     notesService.insertNote(
         req.app.get('db'),

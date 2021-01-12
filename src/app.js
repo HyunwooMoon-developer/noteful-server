@@ -22,7 +22,6 @@ const morganOption = (NODE_ENV === 'production')
 app.use(morgan(morganOption))
 app.use(helmet())
 app.use(cors())
-
 //route
 app.get('/', (req, res) => {
     res.send('Hello, boilerplate!');
@@ -33,6 +32,6 @@ app.use('/api/notes', NoteRoute);
 //app.use(validateBearerToken);
 
 //error handler
-app.use(errorHandler);
+//app.use(errorHandler);
 
 module.exports = app

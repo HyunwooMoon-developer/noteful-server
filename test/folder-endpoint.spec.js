@@ -4,6 +4,8 @@ const supertest = require('supertest');
 const app = require('../src/app');
 const {makeFolderArray} = require('./folder.fixture');
 
+
+
 describe('Folders Endpoints', ()=> {
     let db;
 
@@ -12,7 +14,7 @@ describe('Folders Endpoints', ()=> {
             client : 'pg',
             connection : process.env.TEST_DB_URL,
         });
-        app.set(db);
+        app.set('db', db)
     });
 
     after('disconnect from db', () => db.destroy())
@@ -26,6 +28,20 @@ describe('Folders Endpoints', ()=> {
                     .get(`/api/folders`)
                     .expect(200, [])
             })
+        })
+        context(`Given there are folders in the database` , ()=> {
+            const testFolder = makeFolderArray();
+
+            beforeEach('insert folders', ()=>{
+                return db
+                    .into('folders')
+                    .insert(testFolder)
+            })
+        })
+        it('responds with 200 and all of the folders' , ()=>{
+            return supertest(app)
+            .get('/api/folders')
+            .expect(200, testFolder)
         })
     })
 })
