@@ -10,6 +10,7 @@ const errorHandler = require('./errorHandler')
 //const validateBearerToken = require('./validateBearerToken')
 const logger = require('./logger');
 const folderRouter = require('./folders/folder-route')
+const NoteRoute = require('./notes/note-route')
 
 const app = express()
 //pipeline begins
@@ -28,6 +29,7 @@ app.get('/', (req, res) => {
 })
 
 app.use('/api/folders' , folderRouter);
+app.use('/api/notes', NoteRoute);
 //app.use(validateBearerToken);
 
 //error handler
