@@ -1,9 +1,11 @@
 /* eslint-disable no-undef */
-const pg = require('pg')
 const app = require('./app')
 const {PORT, DATABASE_URL} = require('./config');
 const knex = require('knex');
-pg.defaults.ssl = true;
+const pg = require("pg")
+
+pg.defaults.ssl = process.env.NODE_ENV === 'production'
+
 
 const db = knex({
   client: 'pg',
